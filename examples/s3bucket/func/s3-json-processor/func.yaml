@@ -1,0 +1,7 @@
+# $schema: https://raw.githubusercontent.com/knative/func/d04ff0a3/schema/func_yaml-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/knative/func/d04ff0a3/schema/func_yaml-schema.json
+specVersion: 0.36.0
+name: s3-json-processor
+runtime: go
+created: 2025-09-30T03:20:12.569272-04:00
+invoke: cloudevent

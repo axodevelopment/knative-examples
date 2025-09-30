@@ -1,0 +1,14 @@
+{
+  "timestamp": "2024-01-15T10:30:00Z",
+  "user": "demo-user",
+  "action": "file-upload-test",
+  "metadata": {
+    "source": "local-test",
+    "environment": "development",
+    "version": "1.0.0"
+  },
+  "data": {
+    "message": "Testmessage for file upload",
+    "status": "success"
+  }
+}

@@ -1,0 +1,1 @@
+knative kamel plus s3 
