@@ -1,0 +1,41 @@
+apiVersion: camel.apache.org/v1
+kind: Pipe
+metadata:
+  name: aws-s3-json-source
+  namespace: s3bucket
+  annotations:
+    trait.camel.apache.org/mount.configs: "secret:aws-s3-credentials"
+    trait.camel.apache.org/logging.level: "INFO"
+    trait.camel.apache.org/container.image-pull-policy: "IfNotPresent"
+spec:
+  integration:
+    dependencies:
+    - "camel:cloudevents"
+    - "camel:jackson"
+    - "camel:log"
+  source:
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: aws-s3-source
+      namespace: openshift-operators
+    properties:
+      bucketNameOrArn: "${aws.s3.bucketNameOrArn}"
+      accessKey: "${aws.s3.accessKey}"
+      secretKey: "${aws.s3.secretKey}"
+      region: "${aws.s3.region}"
+      deleteAfterRead: "false"
+      autoCreateBucket: "false"
+      useDefaultCredentialsProvider: "false"
+    dataTypes:
+      out:
+        format: application-cloudevents
+  sink:
+    ref:
+      kind: Broker
+      apiVersion: eventing.knative.dev/v1
+      name: s3-events-broker
+      namespace: s3bucket
+    dataTypes:
+      in:
+        format: application-cloudevents

@@ -1,0 +1,13 @@
+apiVersion: camel.apache.org/v1
+kind: IntegrationPlatform
+metadata:
+  name: camel-k
+  namespace: s3bucket
+spec:
+  profile: OpenShift
+  build:
+    strategy: OpenShift
+    registry:
+      address: image-registry.openshift-image-registry.svc:5000
+      organization: s3bucket
+      insecure: false
