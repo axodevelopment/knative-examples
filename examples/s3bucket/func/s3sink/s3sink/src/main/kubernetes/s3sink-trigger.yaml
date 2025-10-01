@@ -1,0 +1,15 @@
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: s3sink-trigger
+  namespace: s3bucket
+spec:
+  broker: s3-events-broker
+  filter:
+    attributes:
+      type: com.homelab.s3.object.created
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: s3sink

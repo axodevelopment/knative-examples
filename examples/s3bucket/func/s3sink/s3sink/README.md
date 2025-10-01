@@ -1,4 +1,4 @@
-# s3proc
+# s3sink
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -49,7 +49,7 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/s3proc-1.0.0-SNAPSHOT-runner`
+You can then execute your native executable with: `./target/s3sink-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
 
@@ -63,28 +63,14 @@ Easily start your REST Web Services
 
 
 
-## s3Proc approach
-
-Working...
-
-s3proc is Apachae Camel for Quarkus
-
-Deployed kubernetes resource sa and sinkbinding
 
 
-Also for env variables to see it tracing through the camel route
-
-```bash
- oc -n s3bucket set env deploy/s3proc \
-  CAMEL_MAIN_TRACING=true \
-  CAMEL_MAIN_MESSAGE_HISTORY=true \
-  CAMEL_MAIN_USE_MDC_LOGGING=true \
-  QUARKUS_LOG_CATEGORY__ORG_APACHE_CAMEL_COMPONENT_AWS2_S3__LEVEL=DEBUG \
-  QUARKUS_LOG_CATEGORY__ORG_APACHE_CAMEL_COMPONENT_KNATIVE__LEVEL=DEBUG \
-  QUARKUS_LOG_CATEGORY__ORG_APACHE_CAMEL_COMPONENT_HTTP__LEVEL=DEBUG \
-  QUARKUS_LOG_CATEGORY__ORG_APACHE_CAMEL_PROCESSOR__LEVEL=DEBUG
-```
-
-```bash
-oc -n s3bucket rollout restart deploy/s3proc
-```
+./mvnw clean package -DskipTests \
+  -Dquarkus.container-image.build=true \
+  -Dquarkus.container-image.push=true \
+  -Dquarkus.container-image.registry=image-registry.openshift-image-registry.svc:5000 \
+  -Dquarkus.container-image.group=s3bucket \
+  -Dquarkus.container-image.name=s3sink \
+  -Dquarkus.container-image.tag=latest \
+  -Dquarkus.container-image.username=$(oc whoami) \
+  -Dquarkus.container-image.password=$(oc whoami -t)
