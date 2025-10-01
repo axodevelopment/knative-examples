@@ -1,0 +1,15 @@
+apiVersion: sources.knative.dev/v1
+kind: SinkBinding
+metadata:
+  name: s3proc-to-broker
+  namespace: s3bucket
+spec:
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: s3-events-broker
+  subject:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: s3proc

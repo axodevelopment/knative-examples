@@ -1,0 +1,13 @@
+{
+  "resources": [
+    {
+      "name": "s3-events-broker",
+      "type": "event",
+      "endpointKind": "sink",
+      "url": "{{k.sink}}",
+      "objectApiVersion": "eventing.knative.dev/v1",
+      "objectKind": "Broker",
+      "objectName": "s3-events-broker"
+    }
+  ]
+}

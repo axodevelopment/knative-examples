@@ -1,0 +1,37 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: KameletBinding
+metadata:
+  name: aws-s3-json-source
+  namespace: s3bucket
+spec:
+  integration:
+    traits:
+      knative:
+        enabled: true
+        auto: true
+      mount:
+        configs: ["secret:aws-s3-credentials"]
+      container:
+        name: integration
+      logging:
+        level: INFO
+  source:
+    ref:
+      apiVersion: camel.apache.org/v1alpha1
+      kind: Kamelet
+      name: aws-s3-source
+    properties:
+      bucketNameOrArn: "{{aws.s3.bucketNameOrArn}}"
+      accessKey:       "{{aws.s3.accessKey}}"
+      secretKey:       "{{aws.s3.secretKey}}"
+      region:          "{{aws.s3.region}}"
+      deleteAfterRead: true
+      useDefaultCredentialsProvider: false
+  sink:
+    uri: >-
+      cloudevents:http://broker-ingress.knative-eventing.svc.cluster.local/s3bucket/s3-events-broker
+      ?specVersion=1.0
+      &type=org.apache.camel.event.aws.s3.getObject
+      &source=aws.s3.bucket.{{aws.s3.bucketNameOrArn}}
+    #uri: "http://broker-ingress.knative-eventing.svc.cluster.local/s3bucket/s3-events-broker"
+  

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3proc
+  namespace: s3bucket
+  labels: { app: s3proc }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: s3proc }
+  template:
+    metadata:
+      labels: { app: s3proc }
+    spec:
+      serviceAccountName: s3proc-sa
+      containers:
+      - name: s3proc
+        image: YOUR_IMAGE_HERE   # e.g. quay.io/you/s3proc:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: QUARKUS_CONFIG_LOCATIONS
+            value: /etc/aws/aws-s3-credentials.properties
+          - name: CAMEL_STARTUPCONDITION_ENVIRONMENT_VARIABLE_EXISTS
+            value: K_SINK
+        volumeMounts:
+          - name: aws-creds
+            mountPath: /etc/aws
+            readOnly: true
+      volumes:
+        - name: aws-creds
+          secret:
+            secretName: aws-s3-credentials
+            items:
+              - key: aws-s3-credentials.properties
+                path: aws-s3-credentials.properties
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: s3proc-sa
+  namespace: s3bucket
